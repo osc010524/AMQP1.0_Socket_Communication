@@ -1,0 +1,5 @@
+
+- sasl_mechanisms
+Length:  42
+Hex: 41 4d 51 50 03 01 00 00 00 00 00 22 02 01 00 00 00 53 40 c0 15 01 e0 12 02 a3 05 50 4c 41 49 4e 09 41 4e 4f 4e 59 4d 4f 55 53
+ASCII: AMQP.......".....S@........PLAIN.ANONYMOUS
