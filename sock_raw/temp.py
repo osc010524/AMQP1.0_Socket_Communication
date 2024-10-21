@@ -122,7 +122,7 @@
 #
 #
 
-from sock_raw.types import AMQPTypeHelper
+from sock_raw.AMQP_type import AMQPTypeHelper
 
 hostname: str = "192.168.0.47"
 test = AMQPTypeHelper()

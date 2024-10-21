@@ -170,6 +170,8 @@ class AMQPTypeHelper:
             "array32": ARRAY32_DELIMITER,
         }
 
+        self.reverse_delimiters = {v: k for k, v in self.delimiters.items()}
+
     def add_delimiter(self, value:bytes, value_type):
         """
         해당 값에 맞는 구분자를 추가
@@ -190,7 +192,7 @@ class AMQPTypeHelper:
 
         return result  # 구분자가 없는 경우 그대로 반환
 
-    def add_delimiter_size(self, value:bytes, value_type) -> bytes :
+    def add_delimiter_size(self, value:bytes, value_type:bytes) -> bytes :
         """
         해당 값에 맞는 구분자와 사이즈를 추가
         :param value: 값 (bytes)
@@ -206,7 +208,28 @@ class AMQPTypeHelper:
 
         return result  # 구분자가 없는 경우 그대로 반환
 
-    def constructor_list_header(self,type:str, values_size:int, element:int) -> bytes:
+    def re_delimiter_valu(self, value:bytes):
+        """
+        해당 값에 맞는 구분자와 사이즈를 제거
+        :param value: 값 (bytes)
+        :return: value, value_size, value_type
+        """
+        value_type = value[0]
+        value_size = value[1]
+        value = value[2:]
+
+        try:
+            value_type = self.reverse_delimiters[value_type]
+        except KeyError:
+            raise KeyError(f"Invalid value type | value_type = {hex(value_type)} | value = {value}")
+
+        try:
+            value = value[:value_size]
+            return value, value_size, value_type
+        except:
+            return Exception("Invalid value size")
+
+    def delimiter_list_header(self, type:str, values_size:int, element:int) -> bytes:
         """
         array 타입의 값 생성
         :param type: array 타입 (str)
@@ -224,15 +247,15 @@ class AMQPTypeHelper:
         except KeyError:
             raise KeyError("Invalid value type")
 
-        result = type_byte + values_size.to_bytes() + element.to_bytes()
+        result = type_byte.to_bytes() + values_size.to_bytes() + element.to_bytes()
         return result
 
-    def de_constructor_list_header(self, value:bytes):
+    def de_delimiter_list_header(self, value:bytes):
         """
-        array 타입의 값 분해
-        :param type: array 타입 (str)
-        :param values_size: array 사이즈 (int)
-        :param element: array 개수 (int)
+        list 타입의 값 분해
+        :param type: list 타입 (str)
+        :param values_size: list 사이즈 (int)
+        :param element: list 개수 (int)
         :return:
 
         type:
@@ -240,9 +263,100 @@ class AMQPTypeHelper:
             - "list8": LIST8_DELIMITER,
             - "list32": LIST32_DELIMITER
         """
-        type_byte = self.delimiters[value[0]]
-        values_size = int.from_bytes(value[1], byteorder='big')
+        try:
+            type_byte = self.reverse_delimiters[value[0]]
+        except KeyError:
+            raise KeyError(f"Invalid value type | value_type = {hex(value[0])}")
+        # values_size = int.from_bytes(value[1], byteorder='big')
+        values_size = value[1]
         element = int.from_bytes(value[2:], byteorder='big')
 
         return type_byte, values_size, element
 
+    def de_delimiter_array_header(self, value: bytes):
+        """
+        array 타입의 header 분해
+        :param value: raw data (bytes)
+        :return:
+        """
+        type_byte = value[0]
+        try:
+            type_str = self.reverse_delimiters[type_byte]
+        except KeyError:
+            raise KeyError("Invalid value type")
+
+        values_size = value[1]
+        element = value[2]
+        values_type = value[3]
+        value = value[4:]
+        value = value[:values_size]
+
+        return type_str, values_size, element, values_type, value
+
+    def de_constructor_array(self, value: bytes):
+        type_str, array_size, element, values_type, value = self.de_delimiter_array_header(value)
+
+        array_result = []
+        for i in range(element):
+            length = value[0]
+            value = value[1:]
+            val = value[:length]
+            value = value[length:]
+            array_result.append(val)
+
+        return array_result , type_str, array_size, element, values_type
+
+    def de_delimiter_map_header(self, value:bytes):
+        """
+        map 타입의 header 분해
+        :param type: map 타입 (str)
+        :param values_size: map 사이즈 (int)
+        :param element: map 개수 (int)
+        :return: type_str, values_size, element
+
+        type:
+            - "map8": MAP8_DELIMITER,
+            - "map32": MAP32_DELIMITER
+        """
+        type_byte = value[0]
+        try:
+            type_str = self.reverse_delimiters[type_byte]
+        except KeyError:
+            raise KeyError(f"Invalid value type | value_type = {hex(type_byte)}")
+
+        values_size = value[1]
+        element = value[2]
+
+        return type_str, values_size, element
+
+    def de_constructor_map (self, value:bytes):
+        """
+        map 타입의 값 분해
+        :param value: map 타입 값 (bytes)
+        :return:
+        """
+        type_str, dic_size, element = self.de_delimiter_map_header(value)
+        value = value[3:]
+
+        dic = {}
+        for i in range(element//2):
+            key, key_size, key_type = self.re_delimiter_valu(value)
+            value = value[2:]
+            value = value[key_size:]
+            val, val_size, val_type = self.re_delimiter_valu(value)
+            value = value[2:]
+            value = value[val_size:]
+            dic[key] = val
+
+        return dic , dic_size
+
+
+if __name__ == '__main__':
+#     #b'sole-connection-for-container' 29 sym8
+#     data = bytes.fromhex("a3 1d 73 6f 6c 65 2d 63 6f 6e 6e 65 63 74 69 6f 6e 2d 66 6f 72 2d 63 6f 6e 74 61 69 6e 65 72 80 80 80")
+#     data = bytes.fromhex("c1 34 04 a3 07 70 72 6f 64 75 63 74 a1 17 61 70 61 63 68 65 2d 61 63 74 69 76 65 6d 71 2d 61 72 74 65 6d 69 73 a3 07 76 65 72 73 69 6f 6e a1 06 32 2e 33 37 2e 30")
+    data = bytes.fromhex("e04d04a31d736f6c652d636f6e6e656374696f6e2d666f722d636f6e7461696e65721044454c415945445f44454c49564552590b5348415245442d535542530f414e4f4e594d4f55532d52454c4159")
+    # print(data)
+    amqp = AMQPTypeHelper()
+    # print(amqp.de_constructor_array(data))
+# 0xe0 0x4d 0x04 0xa3 0x1d
