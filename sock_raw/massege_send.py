@@ -10,12 +10,13 @@ protocol_version_check = True
 Type = 1 # SASL
 contianer_id = str(uuid.uuid4())
 address = "queue.example"
+# address = b"\x80\x00\x00\x01"
 
 #default
 SASL_header = b"\x00\x53"
 Performatives_header = b"\x00\x53"
 
-host = "192.168.0.47"
+host = "192.168.0.32"
 port = 5672
 
 
@@ -142,16 +143,27 @@ class SASLInit:
 
         self.SASL_Mechanisms = SASL_Mechanisms
 
+    # def auth_data(self):
+    #     #todo 임시 제작
+    #     # SASL PLAIN
+    #     # auth_str = f"\0{username}\0{password}"
+    #     Mechanisms = [mechanism.decode() for mechanism in self.SASL_Mechanisms.Mechanisms]
+    #     if Mechanisms[0] == "PLAIN":
+    #         id = Mechanisms[1] # ANONYMOUS
+    #         pw = Mechanisms[1].lower()
+    #         data = b"\xa3\x09" + id.encode() + b"\xa0\x09" + pw.encode()
+    #     return data
+
     def auth_data(self):
         #todo 임시 제작
         # SASL PLAIN
         # auth_str = f"\0{username}\0{password}"
-        Mechanisms = [mechanism.decode() for mechanism in self.SASL_Mechanisms.Mechanisms]
-        if Mechanisms[0] == "PLAIN":
-            id = Mechanisms[1] # ANONYMOUS
-            pw = Mechanisms[1].lower()
-            data = b"\xa3\x09" + id.encode() + b"\xa0\x09" + pw.encode()
-        return data
+
+        PLAIN = b"\xa3\x05PLAIN"
+        payload = b"ACTIVEMQ.CLUSTER.ADMIN.USER" + b"\x00"+ b"\x00"
+        payload = b"\xa0" + len(payload).to_bytes(byteorder="big") + payload
+        payload = PLAIN + payload
+        return payload
 
     def create_sasl_init(self):
         SASL_Init = self.Doff.to_bytes(1, byteorder="big")
@@ -161,7 +173,7 @@ class SASLInit:
         SASL_Init += self.SASL_Methode.to_bytes(1, byteorder="big")
 
         self.Arguments_data = self.auth_data()
-        Arguments_header = AMQPTypeHelper().delimiter_list_header("list8", len(self.Arguments_data), 1)
+        Arguments_header = AMQPTypeHelper().delimiter_list_header("list8", len(self.Arguments_data), 2)
         self.Arguments = Arguments_header + self.Arguments_data
         SASL_Init += self.Arguments
 
@@ -309,8 +321,13 @@ class Open_begin_attach_send:
 
         self.Name_header: bytes = b"\xc0\x63\x0b \xa1\x32"
         # self.Name: str = contianer_id + address # todo attach name = container_id + address
-        self.Name: str = f"{contianer_id}-{address}" # todo attach name = container_id + address
-        self.Name = AMQPTypeHelper().add_delimiter_size(self.Name.encode(), "str8_utf8")
+        # fix sechang
+        # self.Name: str = f"{contianer_id}-{address}" # todo attach name = container_id + address
+        Name: str = f"{contianer_id}-" # todo attach name = container_id + address
+        self.Name = Name.encode()
+        self.Name = self.Name+address.encode() #0x10FFFF + 2
+        self.Name = AMQPTypeHelper().add_delimiter_size(self.Name, "str8_utf8")
+        # self.Name = AMQPTypeHelper().add_delimiter_size(self.Name.encode(), "str8_utf8")
         self.Handle: bytes = b"\x43" # todo Handle = 0
         self.Role: bytes = b"\x42" # todo Role = sender
 
@@ -340,8 +357,11 @@ class Open_begin_attach_send:
         # Target mack
         delimiter: bytes = b"\x00\x53\x29"
 
+        # fix sechang
         self.Address: str = address
-        self.Address = AMQPTypeHelper().add_delimiter_size(self.Address.encode(), "str8_utf8")
+        self.Address = self.Address.encode()
+        # self.Address = address
+        self.Address = AMQPTypeHelper().add_delimiter_size(self.Address, "str8_utf8")
         self.Terminus_Durable: bytes = b"\x43" # todo Terminus_Durable = none(0)
         self.Timeout: bytes = b"\x43"
         self.Timeout = AMQP_type.NULL_DELIMITER.to_bytes() + self.Timeout
@@ -766,6 +786,15 @@ class Open_begin_attach_flow_recv:
         flow_result = self.flow(attach_result)
 
         return True
+    def printer(self):
+        print("Open")
+        print(self.open_dic)
+        print("Begin")
+        print(self.begin_dic)
+        print("Attach")
+        print(self.attach_dic)
+        print("Flow")
+        print(self.flow_dic)
 
 class Transfer_send:
     def __init__(self):
@@ -906,8 +935,13 @@ def main():
     recv_data = socket_handler.receive_packet()
     sasl_outcome = SASLOutcome(SASL_init)
     sasl_outcome.sasl_outcome(recv_data)
+    print("sasl.outcome success")
+    hex_print(recv_data)
+    print("\n\n")
 
     recv_data = socket_handler.receive_packet()
+    print("test")
+    hex_print(recv_data)
 
     open_begin_attach = Open_begin_attach_send(protocol_header)
     open_begin_attach_packet = open_begin_attach.open_begin_attach()
@@ -916,6 +950,11 @@ def main():
     recv_data = socket_handler.receive_packet()
     open_begin_attach_flow = Open_begin_attach_flow_recv(protocol_header)
     open_begin_attach_flow.open_begin_attach_flow(recv_data)
+    print("open_begin_attach_flow success")
+    hex_print(recv_data)
+    open_begin_attach_flow.printer()
+    print("\n\n")
+
 
     transfer = Transfer_send()
     transfer_packet = transfer.transfer("Hello World")
@@ -923,7 +962,9 @@ def main():
 
     recv_data = socket_handler.receive_packet()
     disposition = transfer.disposition(recv_data)
+    print("disposition success")
     print(disposition)
+    print("\n\n")
 
 if __name__ == '__main__':
     main()
