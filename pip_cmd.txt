@@ -1,4 +1,4 @@
-#  pip 내용 저장
+#  pip 내용 저장 / 업데이트
 pip freeze > requirements.txt
 # pip 내용 설치
 pip install -r requirements.txt
