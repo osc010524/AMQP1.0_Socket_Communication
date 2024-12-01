@@ -1,3 +1,5 @@
+# 큐 생성 및 오류 확인 코드
+
 from proton import Message
 from proton.reactor import Container
 from proton.handlers import MessagingHandler

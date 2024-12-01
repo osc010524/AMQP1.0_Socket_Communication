@@ -2,7 +2,8 @@ from proton import Message
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
-broker_url = "amqp://192.168.0.32:5672"
+# broker_url = "amqp://192.168.0.32:61616" #ALL port
+broker_url = "amqp://192.168.0.32:5672" # AMQP port
 address = "queue.example"
 
 class SendMessage(MessagingHandler):

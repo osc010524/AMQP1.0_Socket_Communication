@@ -1,3 +1,5 @@
+# 큐 생성 코드
+
 from proton import Message
 from proton.reactor import Container
 from proton.handlers import MessagingHandler

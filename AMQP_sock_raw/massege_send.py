@@ -6,9 +6,8 @@ from AMQP_type import AMQPTypeHelper
 import AMQP_type
 
 #option
-protocol_version_check = True
 Type = 1 # SASL
-contianer_id = str(uuid.uuid4())
+contianer_id = str(uuid.uuid4()) # default
 address = "queue.example"
 # address = b"\x80\x00\x00\x01"
 
@@ -26,8 +25,6 @@ def hex_print(data):
     print(" ".join("{:02x}".format(c) for c in data))
     print("ASCII: ", end="")
     print("".join(chr(c) if 32 <= c <= 126 else "." for c in data))
-
-
 
 
 class ProtocolHeader:
@@ -940,8 +937,8 @@ def main():
     print("\n\n")
 
     recv_data = socket_handler.receive_packet()
-    print("test")
-    hex_print(recv_data)
+    # print("sasl_receive")
+    # hex_print(recv_data)
 
     open_begin_attach = Open_begin_attach_send(protocol_header)
     open_begin_attach_packet = open_begin_attach.open_begin_attach()

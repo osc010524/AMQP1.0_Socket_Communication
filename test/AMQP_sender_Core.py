@@ -1,3 +1,5 @@
+# 코어 테스트 코드
+
 import json
 from proton import Message
 from proton.handlers import MessagingHandler

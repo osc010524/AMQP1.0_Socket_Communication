@@ -1,0 +1,41 @@
+<component name="libraryTable">
+  <library name="apache.activemq.camel" type="repository">
+    <properties maven-id="org.apache.activemq:activemq-camel:5.16.5" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-camel/5.16.5/activemq-camel-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/camel/camel-jms/2.25.4/camel-jms-2.25.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/camel/camel-core/2.25.4/camel-core-2.25.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/bind/jaxb-core/2.3.0/jaxb-core-2.3.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/bind/jaxb-impl/2.3.0/jaxb-impl-2.3.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/camel/camel-spring/2.25.4/camel-spring-2.25.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/5.1.20.RELEASE/spring-core-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-jcl/5.1.20.RELEASE/spring-jcl-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-aop/5.1.20.RELEASE/spring-aop-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-expression/5.1.20.RELEASE/spring-expression-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-jms/5.1.20.RELEASE/spring-jms-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-messaging/5.1.20.RELEASE/spring-messaging-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/5.1.20.RELEASE/spring-context-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-tx/5.1.20.RELEASE/spring-tx-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/5.1.20.RELEASE/spring-beans-5.1.20.RELEASE.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-spring/5.16.5/activemq-spring-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/xbean/xbean-spring/4.21/xbean-spring-4.21.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-broker/5.16.5/activemq-broker-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-openwire-legacy/5.16.5/activemq-openwire-legacy-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.13.2.2/jackson-databind-2.13.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.13.2/jackson-annotations-2.13.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.13.2/jackson-core-2.13.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-pool2/2.11.1/commons-pool2-2.11.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-pool/5.16.5/activemq-pool-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-jms-pool/5.16.5/activemq-jms-pool-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-jms_1.1_spec/1.1.1/geronimo-jms_1.1_spec-1.1.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/activemq/activemq-client/5.16.5/activemq-client-5.16.5.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/fusesource/hawtbuf/hawtbuf/1.11/hawtbuf-1.11.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/geronimo/specs/geronimo-j2ee-management_1.1_spec/1.0.1/geronimo-j2ee-management_1.1_spec-1.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

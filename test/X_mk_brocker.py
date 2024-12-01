@@ -1,3 +1,5 @@
+# AMQP 를 이용해서 Brocker 을 생성하는 것은 불가능하다.
+
 import time
 from proton import Message
 from proton.reactor import Container

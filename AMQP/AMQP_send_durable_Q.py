@@ -1,3 +1,6 @@
+# 영속적인 큐 생성 예제
+# 디스크에 큐를 저장함
+
 import requests
 import json
 
