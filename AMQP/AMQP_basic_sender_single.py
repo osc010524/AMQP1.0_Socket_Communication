@@ -2,8 +2,8 @@ from proton import Message
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
-# broker_url = "amqp://192.168.0.32:61616" #ALL port
-broker_url = "amqp://192.168.0.32:5672" # AMQP port
+broker_url = "amqp://192.168.0.32:61616" #ALL port
+# broker_url = "amqp://192.168.0.32:5672" # AMQP port
 address = "queue.example"
 
 class SendMessage(MessagingHandler):
@@ -11,6 +11,8 @@ class SendMessage(MessagingHandler):
         super(SendMessage, self).__init__()
         self.broker_url = broker_url
         self.address = address
+        self.user = "admin"
+        self.password = "admin"
         self.sender = None
 
     def on_start(self, event):
@@ -45,6 +47,9 @@ def send_message(broker_url, address):
             handler.conn.close()  # 연결을 종료하고 루프 탈출
             break
         handler.send_message(message_body)
+        handler.conn.close()
+        break
+
 
 # Example usage:
 send_message(broker_url, address)

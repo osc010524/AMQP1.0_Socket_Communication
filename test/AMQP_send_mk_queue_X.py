@@ -1,4 +1,6 @@
 # 큐 생성 코드
+# chatGPT 코드 실제 생성자를 따라가면
+# queue_name => address
 
 from proton import Message
 from proton.reactor import Container
