@@ -2,7 +2,7 @@ from proton import Message
 from proton.handlers import MessagingHandler
 from proton.reactor import Container
 
-broker_url = "amqp://192.168.0.32:5672"
+broker_url = "amqp://192.168.0.64:5672"
 address = "queue.example"
 
 class SendMessage(MessagingHandler):
