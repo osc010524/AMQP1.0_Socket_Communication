@@ -40,7 +40,7 @@ class AMQPSender(MessagingHandler):
 if __name__ == "__main__":
     # Configuration
     # amqp_url = "amqp://192.168.0.47:61616"  # Replace with your broker URL
-    amqp_url = "amqp://192.168.0.47:5672"  # Replace with your broker URL
+    amqp_url = "amqp://192.168.0.64:5672"  # Replace with your broker URL
     # user = "ACTIVEMQ.CLUSTER.ADMIN.USER"    # Replace with your username
     user = "test_user"    # Replace with your username
     # password = "CHANGE ME!!"                # Replace with your password
